@@ -1,0 +1,21 @@
+pragma solidity ^0.4.24;
+
+contract MessageBox {
+    
+    string public message;
+    
+    constructor(string initalMessage) public {
+        message= initalMessage;
+    }
+    
+    function setMessage(string newMessage) public {
+        message= newMessage;
+    }
+    
+    function getMessage() public view returns (string) {
+        return message;
+    }
+    
+}
+
+0x692a70d2e424a56d2c6c27aa97d1a86395877b3a

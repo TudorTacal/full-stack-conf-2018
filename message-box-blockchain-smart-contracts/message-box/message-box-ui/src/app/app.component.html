@@ -1,0 +1,16 @@
+<div>
+  <p>
+    Current message: {{ message$ | async }}
+  </p>
+
+  <p>
+    {{ account }}
+  </p>
+
+  <div>
+    <input type="text" [(ngModel)]='newMessage' *ngIf="!loading">
+    <button (click)='setMessage()' *ngIf="!loading">save</button>
+    <p *ngIf="loading">Please wait - processing data</p>
+    <p>{{error}}</p>
+  </div>
+</div>

@@ -1,0 +1,60 @@
+pragma solidity ^0.4.21;
+
+contract GuessANumber {
+    
+    uint                        private solution;
+    mapping(address => string)  private lastGuess; 
+    bool                        private active; 
+
+    constructor () public {
+        solution = random();
+        active = true;
+    }
+
+    // payable: can send ether with the call
+    function guess(uint currentGuess) public payable activeOnly {
+
+        address mySelf = this;
+
+        // msg is a global variable, available everywhere
+        // make sure, we get enough money
+        require(msg.value >= 999999 wei); 
+
+        if (currentGuess == solution)
+        {
+            lastGuess[msg.sender] = 'you are the winner!';
+            msg.sender.transfer(mySelf.balance);
+            active = false;
+        }
+
+        if (currentGuess < solution)
+        {
+            lastGuess[msg.sender] = 'too low';
+        }
+
+        if (currentGuess > solution)
+        {
+            lastGuess[msg.sender] = "too high";
+        }
+    }
+
+    function myLastGuess() public view returns (string)
+    {
+       return lastGuess[msg.sender]; 
+    }
+
+    // ======================================================================
+
+    // warning: this is not really random
+    // idea by Stephen Grider
+    function random() private view returns (uint) {
+        // keccak256 (=sha3), now and block are global available
+        return uint(keccak256(block.difficulty, now)) % 100;
+    }
+
+    // make sure, that the game is still running
+    modifier activeOnly() {
+        require(active == true);
+        _; // << run the rest of the original function code
+    }    
+}
